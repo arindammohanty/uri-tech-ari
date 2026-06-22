@@ -86,7 +86,7 @@ export default function AboutPage() {
           
           <div className="bg-slate-50 border border-slate-100 p-10 md:p-14 rounded-[2rem]">
             <h4 className="text-orange-500 font-bold tracking-wider text-sm uppercase mb-4">Our Vision</h4>
-            <h3 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">To be India's most trusted IT staffing and recruitment partner.</h3>
+            <h3 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">To be India&apos;s most trusted IT staffing and recruitment partner.</h3>
             <p className="text-slate-600 text-lg leading-relaxed">We&apos;re building toward a future where no great technologist goes undiscovered, and no company struggles to find the talent they need to grow. We want to be the bridge that makes Indian tech thrive.</p>
           </div>
         </div>
