@@ -36,7 +36,7 @@ export default function JobsPage() {
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight">Find Your Next Opportunity</h1>
           <p className="text-lg md:text-xl text-slate-500 max-w-2xl leading-relaxed font-medium">
-            Browse hundreds of live IT and tech roles across India's top companies.
+            Browse hundreds of live IT and tech roles across India&apos;s top companies.
           </p>
         </div>
       </section>

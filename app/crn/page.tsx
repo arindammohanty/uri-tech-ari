@@ -38,7 +38,7 @@ export default function CRNPage() {
 
           <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 relative z-10">
             <p className="text-slate-600 font-medium leading-relaxed mb-8 text-sm">
-              "From the initial conversations all the way through to the project's successful conclusion, URI Technologies has delivered consistently. Their unique strategy has resulted in a discernible rise in our customers' trust and happiness. A great option if you wish to evolve your company's digital strategy."
+              &quot;From the initial conversations all the way through to the project&apos;s successful conclusion, URI Technologies has delivered consistently. Their unique strategy has resulted in a discernible rise in our customers&apos; trust and happiness. A great option if you wish to evolve your company&apos;s digital strategy.&quot;
             </p>
             <div className="flex items-center">
               <div className="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center mr-4 text-orange-500 font-bold text-sm border border-orange-100">
@@ -160,7 +160,7 @@ export default function CRNPage() {
             </div>
 
             <div className="text-center pt-4">
-              <span className="text-sm font-medium text-slate-500">Don't have an account? </span>
+              <span className="text-sm font-medium text-slate-500">Don&apos;t have an account? </span>
               <a href="#" className="text-sm font-bold text-slate-900 hover:text-orange-500 transition-colors">Create one</a>
             </div>
 

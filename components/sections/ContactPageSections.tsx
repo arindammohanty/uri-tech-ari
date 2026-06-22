@@ -9,7 +9,6 @@ import {
   CheckCircle,
   ChevronDown,
   Facebook,
-  Instagram,
   Linkedin,
   Mail,
   MapPin,

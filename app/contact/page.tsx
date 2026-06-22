@@ -39,18 +39,17 @@ export default function ContactPage() {
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight">Get In Touch</h1>
           <p className="text-lg md:text-xl text-slate-500 max-w-2xl leading-relaxed">
-            Whether you're hiring or job hunting, we'd love to hear from you.
+            Whether you&apos;re hiring or job hunting, we&apos;d love to hear from you.
           </p>
         </div>
       </section>
 
-      {}
       <section className="py-20 lg:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
           
           {/* Left: Contact Info */}
           <div>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6">Let's Talk</h2>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6">Let&apos;s Talk</h2>
             <p className="text-lg text-slate-500 mb-12 leading-relaxed">
               Reach out and one of our team members will respond within one business day. We work with businesses of all sizes across India.
             </p>
@@ -98,7 +97,6 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {}
           {/* Right: Interactive Form */}
           <div className="bg-white p-8 md:p-10 rounded-[2rem] border border-slate-200 shadow-xl relative overflow-hidden">
             {isSubmitted && (
@@ -117,13 +115,13 @@ export default function ContactPage() {
                 onClick={() => setFormType('hiring')}
                 className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${formType === 'hiring' ? 'bg-orange-500 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
               >
-                I'm Hiring
+                I&apos;m Hiring
               </button>
               <button 
                 onClick={() => setFormType('job')}
                 className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${formType === 'job' ? 'bg-orange-500 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
               >
-                I'm Looking for a Job
+                I&apos;m Looking for a Job
               </button>
             </div>
 
@@ -181,8 +179,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-
-      {}
 
       {/* Map Banner Center */}
       <section className="py-20 bg-slate-50 border-y border-slate-100 text-center">

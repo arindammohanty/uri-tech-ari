@@ -37,7 +37,7 @@ export default function Footer() {
           <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 tracking-tight">Ready to Build Your Dream Team?</h2>
             <p className="text-white/90 text-sm md:text-base mb-8 max-w-2xl mx-auto font-medium">
-              Whether you're looking for your next opportunity or searching for top talent — URI Tech is your strategic hiring partner.
+              Whether you&apos;re looking for your next opportunity or searching for top talent — URI Tech is your strategic hiring partner.
             </p>
             <Link 
               href="/contact" 

@@ -1,8 +1,9 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Star, ArrowRight, CheckCircle } from 'lucide-react';
+import { Star, CheckCircle } from 'lucide-react';
 
 const MOCK_TESTIMONIALS = [
   { id: 1, name: "Amit Sharma", role: "Software Engineer at Infosys", image: "https://ui-avatars.com/api/?name=Amit+Sharma&background=f97316&color=fff", content: "URI Tech fundamentally transformed my career trajectory. The platform's intuitive job matching connected me with top-tier recruiters, drastically reducing my search time." },
@@ -24,7 +25,6 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900 pb-20 selection:bg-orange-200 selection:text-orange-900">
       
-      {}
       <section className="pt-16 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           
@@ -89,7 +89,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {}
       <section className="bg-slate-50 py-24 border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-12">About Us</h2>
@@ -113,7 +112,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {}
       <section className="py-24 bg-white border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -140,7 +138,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {}
       <section className="py-24 bg-slate-50 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 rounded-[3rem] my-12 border border-slate-100">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">What Our Clients Say</h2>
@@ -153,7 +150,7 @@ export default function HomePage() {
                 <div className="flex text-yellow-400 mb-6">
                   {[1,2,3,4,5].map(i => <Star key={i} className="w-5 h-5 fill-current" />)}
                 </div>
-                <p className="text-slate-700 mb-8 leading-relaxed font-medium text-[15px]">"{testimonial.content}"</p>
+                <p className="text-slate-700 mb-8 leading-relaxed font-medium text-[15px]">&quot;{testimonial.content}&quot;</p>
               </div>
               <div className="flex items-center">
                 <img src={testimonial.image} alt={testimonial.name} className="w-12 h-12 rounded-full mr-4 bg-orange-100 object-cover" />
@@ -167,7 +164,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {}
       <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           
@@ -183,7 +179,7 @@ export default function HomePage() {
                   <CheckCircle className="w-10 h-10 text-green-500" />
                 </div>
                 <h3 className="text-3xl font-extrabold text-slate-900 mb-2">Inquiry Submitted</h3>
-                <p className="text-lg text-slate-500">Thank you! We'll be in touch shortly.</p>
+                <p className="text-lg text-slate-500">Thank you! We&apos;ll be in touch shortly.</p>
               </div>
             )}
             

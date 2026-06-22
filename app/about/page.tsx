@@ -51,14 +51,12 @@ export default function AboutPage() {
                 URI Tech was founded in Bhubaneswar, Odisha with a single mission: to bridge the gap between exceptional tech talent and the forward-thinking companies that need them. What started as a small recruitment desk has grown into a trusted staffing partner for over 200 companies across India.
               </p>
               <p>
-                We understand the unique pressures of the tech industry: the pace of change, the demand for niche skills, the cost of a bad hire. That's why every placement we make is backed by a rigorous screening process, deep industry knowledge, and a genuine commitment to long-term fit.
+                We understand the unique pressures of the tech industry: the pace of change, the demand for niche skills, the cost of a bad hire. That&apos;s why every placement we make is backed by a rigorous screening process, deep industry knowledge, and a genuine commitment to long-term fit.
               </p>
             </div>
           </div>
         </div>
       </section>
-
-      {}
       
       {/* Stats Row */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
@@ -89,12 +87,10 @@ export default function AboutPage() {
           <div className="bg-slate-50 border border-slate-100 p-10 md:p-14 rounded-[2rem]">
             <h4 className="text-orange-500 font-bold tracking-wider text-sm uppercase mb-4">Our Vision</h4>
             <h3 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">To be India's most trusted IT staffing and recruitment partner.</h3>
-            <p className="text-slate-600 text-lg leading-relaxed">We're building toward a future where no great technologist goes undiscovered, and no company struggles to find the talent they need to grow. We want to be the bridge that makes Indian tech thrive.</p>
+            <p className="text-slate-600 text-lg leading-relaxed">We&apos;re building toward a future where no great technologist goes undiscovered, and no company struggles to find the talent they need to grow. We want to be the bridge that makes Indian tech thrive.</p>
           </div>
         </div>
       </section>
-
-      {}
 
       {/* What We Stand For */}
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -119,8 +115,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {}
-
       {/* The People Behind URI Tech */}
       <section className="py-20 bg-slate-50 mt-12 border-y border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -137,7 +131,7 @@ export default function AboutPage() {
                 </div>
                 <h4 className="text-xl font-bold text-slate-900 mb-1">{member.name}</h4>
                 <p className="text-slate-500 font-medium mb-6 text-sm">{member.role}</p>
-                <p className="text-slate-600 text-sm italic leading-relaxed">"{member.bio}"</p>
+                <p className="text-slate-600 text-sm italic leading-relaxed">&quot;{member.bio}&quot;</p>
               </div>
             ))}
           </div>
@@ -178,7 +172,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {}
       {/* Trusted By Companies (Carousel) */}
       <section className="py-20 bg-slate-50 border-t border-slate-100 text-center overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
