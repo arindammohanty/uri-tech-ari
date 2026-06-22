@@ -1,24 +1,118 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Search, MapPin, Briefcase, ChevronDown, Filter, X } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Search, MapPin, Briefcase, ChevronRight, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 
-const MOCK_JOBS = [
-  { id: 1, title: "Senior React Developer", company: "Infosys Ltd.", location: "Bhubaneswar, Odisha", type: "Full-Time", experience: "5-8 yrs", salary: "12-18 LPA", tags: ["React", "TypeScript", "Next.js"], posted: "2 days ago" },
-  { id: 2, title: "DevOps Engineer", company: "TCS", location: "Bangalore, Karnataka", type: "Full-Time", experience: "3-6 yrs", salary: "20-28 LPA", tags: ["AWS", "Docker", "Kubernetes"], posted: "5 days ago" },
-  { id: 3, title: "HR Business Partner", company: "Wipro Technologies", location: "Hyderabad, Telangana", type: "Full-Time", experience: "4-7 yrs", salary: "8-12 LPA", tags: ["HR Strategy", "Talent Management", "MBA"], posted: "3 days ago" },
-  { id: 4, title: "Cloud Infrastructure Architect", company: "Cognizant", location: "Remote", type: "Contract", experience: "8+ yrs", salary: "35-50 LPA", tags: ["AWS", "Azure", "Terraform"], posted: "Today" },
-  { id: 5, title: "UI/UX Designer", company: "Zoho Corporation", location: "Mumbai, Maharashtra", type: "Full-Time", experience: "3-5 yrs", salary: "8-15 LPA", tags: ["Figma", "Prototyping", "Design Systems"], posted: "3 days ago" },
-  { id: 6, title: "Data Analyst", company: "HCL Technologies", location: "Delhi, NCR", type: "Full-Time", experience: "1-3 yrs", salary: "7-11 LPA", tags: ["SQL", "Power BI", "Python"], posted: "4 days ago" },
+// --- COMPONENTS ---
+const DottedPattern = () => (
+  <div className="absolute inset-0 z-0 pointer-events-none opacity-40" 
+       style={{ backgroundImage: `radial-gradient(circle at 2px 2px, #fed7aa 1px, transparent 0)`, backgroundSize: '32px 32px' }}>
+  </div>
+);
+
+interface ButtonProps {
+  children: React.ReactNode;
+  variant?: 'primary' | 'secondary' | 'dark' | 'outline' | 'ghost';
+  className?: string;
+  onClick?: () => void;
+  type?: 'button' | 'submit' | 'reset';
+}
+
+const Button = ({ children, variant = 'primary', className = '', onClick, type = 'button' }: ButtonProps) => {
+  const baseStyles = "px-6 py-3 rounded-lg font-semibold transition-all duration-200 ease-in-out focus:ring-2 focus:ring-offset-2 inline-flex justify-center items-center";
+  const variants = {
+    primary: "bg-orange-500 text-white hover:bg-orange-600 focus:ring-orange-500 shadow-sm",
+    secondary: "bg-white text-slate-900 border border-slate-200 hover:border-orange-500 hover:text-orange-500 focus:ring-orange-200",
+    dark: "bg-slate-800 text-white hover:bg-slate-900 focus:ring-slate-800 shadow-sm",
+    outline: "bg-transparent text-slate-700 border border-slate-300 hover:border-orange-500 hover:text-orange-500",
+    ghost: "text-slate-600 hover:text-orange-500 hover:bg-orange-50"
+  };
+
+  return (
+    <button type={type} onClick={onClick} className={`${baseStyles} ${variants[variant]} ${className}`}>
+      {children}
+    </button>
+  );
+};
+
+// --- DATA ---
+const LIVE_OPENINGS = [
+  { 
+    id: 1, 
+    title: "ServiceNow Developer", 
+    company: "URI Technologies", 
+    location: "Bangalore", 
+    workMode: "Hybrid",
+    type: "Full-Time", 
+    experience: "4+ yrs", 
+    salary: "15 - 25 LPA INR", 
+    salaryMax: 25, 
+    tags: ["JavaScript", "HTML/XML", "API Integrations", "ITSM"], 
+    posted: "Just Now" 
+  },
+  { 
+    id: 2, 
+    title: "Senior Cloud Architect", 
+    company: "URI Technologies", 
+    location: "Bhubaneswar", 
+    workMode: "On-site",
+    type: "Full-Time", 
+    experience: "8+ yrs", 
+    salary: "30 - 45 LPA INR", 
+    salaryMax: 45, 
+    tags: ["AWS", "Terraform", "Kubernetes", "Microservices"], 
+    posted: "3 days ago" 
+  },
+  { 
+    id: 3, 
+    title: "DevSecOps Engineer", 
+    company: "URI Technologies", 
+    location: "Remote", 
+    workMode: "Remote",
+    type: "Contract", 
+    experience: "5+ yrs", 
+    salary: "20 - 30 LPA INR", 
+    salaryMax: 30, 
+    tags: ["CI/CD", "Docker", "Security Automation"], 
+    posted: "1 week ago" 
+  },
+  { 
+    id: 4, 
+    title: "IT Strategy Consultant", 
+    company: "URI Technologies", 
+    location: "Remote", 
+    workMode: "Remote",
+    type: "Full-Time", 
+    experience: "6+ yrs", 
+    salary: "25 - 40 LPA INR", 
+    salaryMax: 40, 
+    tags: ["Digital Transformation", "Enterprise Architecture"], 
+    posted: "2 days ago" 
+  },
 ];
 
 export default function JobsPage() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [locationFilter, setLocationFilter] = useState('All Locations');
+  const [typeFilter, setTypeFilter] = useState('All Types');
+  const [minSalary, setMinSalary] = useState(0);
+
+  // Advanced Filtering Logic
+  const filteredJobs = useMemo(() => {
+    return LIVE_OPENINGS.filter(job => {
+      const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                            job.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+      const matchesLocation = locationFilter === 'All Locations' || job.location.includes(locationFilter) || job.workMode === locationFilter;
+      const matchesType = typeFilter === 'All Types' || job.type === typeFilter;
+      const matchesSalary = (job.salaryMax || 0) >= minSalary;
+
+      return matchesSearch && matchesLocation && matchesType && matchesSalary;
+    });
+  }, [searchTerm, locationFilter, typeFilter, minSalary]);
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20">
+    <div className="min-h-screen bg-slate-50 animate-in fade-in duration-500 pb-20">
       
       <style dangerouslySetInnerHTML={{__html: `
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -26,161 +120,187 @@ export default function JobsPage() {
       `}} />
 
       {/* Hero Header */}
-      <section className="relative pt-16 pb-20 border-b border-slate-200 bg-white overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-50"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
-          <div className="flex items-center text-sm font-bold text-slate-500 mb-4 tracking-wide uppercase">
-            <Link href="/" className="hover:text-orange-500 cursor-pointer transition-colors">Home</Link>
-            <span className="mx-2 text-orange-500">{'>'}</span>
+      <div className="bg-white border-b border-slate-200 relative pt-12 pb-16">
+        <DottedPattern />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-sm font-medium text-slate-500 mb-4">
+            <Link href="/" className="hover:text-orange-500 transition-colors">Home</Link> 
+            <ChevronRight className="w-3 h-3 inline mx-1"/> 
             <span className="text-orange-500">Jobs</span>
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight">Find Your Next Opportunity</h1>
-          <p className="text-lg md:text-xl text-slate-500 max-w-2xl leading-relaxed font-medium">
-            Browse hundreds of live IT and tech roles across India&apos;s top companies.
-          </p>
+          <h1 className="text-4xl font-extrabold text-slate-900 mb-3">Find Your Next Opportunity</h1>
+          <p className="text-slate-600 text-lg">Browse live IT and enterprise architecture roles at URI Technologies.</p>
         </div>
-      </section>
+      </div>
 
-      {/* Sticky Search Bar - z-[60] ensures it stays above filters */}
-      <div className="bg-white border-b border-slate-200 sticky top-[80px] z-[60] shadow-sm">
+      {/* Sticky Search Bar */}
+      <div className="bg-white border-b border-slate-200 sticky top-0 md:top-20 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-              <input 
-                type="text" 
-                placeholder="Job title, skill, or keyword..." 
-                className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all font-medium"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <div className="flex gap-4">
-              <div className="relative w-full md:w-48">
-                <select className="w-full appearance-none bg-white border border-slate-200 px-4 py-3.5 rounded-xl font-bold text-slate-700 outline-none focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 cursor-pointer">
-                  <option>All Types</option>
-                  <option>Full-Time</option>
-                  <option>Contract</option>
-                </select>
-                <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="relative">
+              <label className="block text-xs font-bold text-slate-500 mb-1 uppercase tracking-wider">Search</label>
+              <div className="relative">
+                <Search className="w-4 h-4 absolute left-4 top-3.5 text-slate-400" />
+                <input 
+                  type="text" 
+                  placeholder="Job title, skills..." 
+                  className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg text-sm outline-none focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 mb-1 uppercase tracking-wider">Location</label>
+              <select 
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg text-sm outline-none focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 appearance-none bg-white"
+                value={locationFilter}
+                onChange={(e) => setLocationFilter(e.target.value)}
+              >
+                <option value="All Locations">All Locations</option>
+                <option value="Bangalore">Bangalore</option>
+                <option value="Bhubaneswar">Bhubaneswar</option>
+                <option value="Remote">Remote</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 mb-1 uppercase tracking-wider">Job Type</label>
+              <select 
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg text-sm outline-none focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 appearance-none bg-white"
+                value={typeFilter}
+                onChange={(e) => setTypeFilter(e.target.value)}
+              >
+                <option value="All Types">All Types</option>
+                <option value="Full-Time">Full-Time</option>
+                <option value="Contract">Contract</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 mb-1 uppercase tracking-wider">Experience</label>
+              <select className="w-full px-4 py-3 border border-slate-300 rounded-lg text-sm outline-none focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 appearance-none bg-white">
+                <option>All Levels</option>
+                <option>Mid Level (3-5 yrs)</option>
+                <option>Senior (5+ yrs)</option>
+              </select>
             </div>
           </div>
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col lg:flex-row gap-10 items-start relative">
-        
-        {/* Mobile Filter Overlay */}
-        {isMobileFilterOpen && (
-          <div className="fixed inset-0 bg-slate-900/50 z-[100] lg:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMobileFilterOpen(false)} />
-        )}
-
-        {/* Sidebar Filters - z-[10] so it slides under the search bar */}
-        <aside className={`
-          fixed inset-y-0 left-0 w-[85%] max-w-sm bg-white shadow-2xl transform transition-transform duration-300 ease-in-out z-[110]
-          lg:static lg:w-72 lg:bg-transparent lg:shadow-none lg:shrink-0 lg:translate-x-0 lg:sticky lg:top-[180px] lg:z-[10]
-          ${isMobileFilterOpen ? 'translate-x-0' : '-translate-x-full'}
-        `}>
-          <div className="h-full overflow-y-auto p-6 lg:p-0 lg:max-h-[calc(100vh-200px)] no-scrollbar">
-            
-            <div className="bg-white lg:rounded-[2rem] lg:border lg:border-slate-200 lg:p-8 lg:shadow-sm">
-              <div className="flex justify-between items-center mb-8 lg:hidden">
-                <h2 className="font-extrabold text-slate-900 text-2xl">Filters</h2>
-                <button onClick={() => setIsMobileFilterOpen(false)} className="p-2 text-slate-500 hover:bg-slate-100 hover:text-orange-500 rounded-full transition-colors">
-                  <X className="w-6 h-6"/>
-                </button>
-              </div>
-
-              <h2 className="hidden lg:block font-extrabold text-slate-900 mb-6 text-xl">Filters</h2>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+        <div className="flex flex-col lg:flex-row gap-8">
+          
+          {/* Sidebar */}
+          <aside className="w-full lg:w-64 shrink-0">
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 sticky top-48">
+              <h2 className="font-bold text-slate-900 mb-6 text-lg">Filters</h2>
               
-              <div className="mb-8">
-                <h3 className="text-sm font-bold text-slate-900 mb-4">Department</h3>
-                <div className="space-y-4">
-                  {['IT & Software', 'Finance & Accounting', 'HR', 'Operations', 'Sales'].map(dept => (
+              <div className="mb-6">
+                <h3 className="text-sm font-bold text-slate-800 mb-3">Department</h3>
+                <div className="space-y-3">
+                  {['Cloud Infrastructure', 'Cyber Security', 'DevOps & Agile', 'IT Consulting', 'Application Development'].map(dept => (
                     <label key={dept} className="flex items-center space-x-3 cursor-pointer group">
-                      <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-orange-500 focus:ring-orange-500 cursor-pointer" />
-                      <span className="text-slate-600 group-hover:text-slate-900 text-sm font-bold transition-colors">{dept}</span>
+                      <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-orange-500 focus:ring-orange-500" />
+                      <span className="text-slate-600 text-sm group-hover:text-orange-500">{dept}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
-              <div className="mb-8">
-                <h3 className="text-sm font-bold text-slate-900 mb-4">Work Mode</h3>
-                <div className="space-y-4">
+              <div className="mb-6">
+                <h3 className="text-sm font-bold text-slate-800 mb-3">Work Mode</h3>
+                <div className="space-y-3">
                   {['On-site', 'Remote', 'Hybrid'].map(mode => (
                     <label key={mode} className="flex items-center space-x-3 cursor-pointer group">
-                      <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-orange-500 focus:ring-orange-500 cursor-pointer" />
-                      <span className="text-slate-600 group-hover:text-slate-900 text-sm font-bold transition-colors">{mode}</span>
+                      <input 
+                        type="checkbox" 
+                        className="w-4 h-4 rounded border-slate-300 text-orange-500 focus:ring-orange-500" 
+                        checked={locationFilter === mode}
+                        onChange={() => setLocationFilter(locationFilter === mode ? 'All Locations' : mode)}
+                      />
+                      <span className="text-slate-600 text-sm group-hover:text-orange-500">{mode}</span>
                     </label>
                   ))}
                 </div>
               </div>
               
               <div className="mb-8">
-                <h3 className="text-sm font-bold text-slate-900 mb-4">Salary Range</h3>
-                <div className="flex items-center gap-2">
-                  <input type="number" placeholder="Min" className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500" />
-                  <span className="text-slate-400 font-bold">-</span>
-                  <input type="number" placeholder="Max" className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500" />
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-sm font-bold text-slate-800">Min Salary</h3>
+                  <span className="text-xs font-bold text-orange-500 bg-orange-50 px-2 py-1 rounded">{minSalary > 0 ? `${minSalary} LPA+` : 'Any'}</span>
                 </div>
+                <input
+                  type="range" min="0" max="50" step="1" value={minSalary}
+                  onChange={(e) => setMinSalary(parseInt(e.target.value))}
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                />
               </div>
 
-              <button onClick={() => setIsMobileFilterOpen(false)} className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-xl transition-colors shadow-lg shadow-orange-500/20">
-                Apply Filters
-              </button>
+              <Button className="w-full py-2 text-sm">Apply Filters</Button>
             </div>
-          </div>
-        </aside>
+          </aside>
 
-        {/* Job Listings Grid */}
-        <div className="flex-1 w-full lg:z-0">
-          <div className="mb-8 flex justify-between items-end gap-4 border-b border-slate-200 pb-4">
-            <div>
-              <h2 className="text-3xl font-extrabold text-slate-900">Job Listings</h2>
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="hidden lg:block text-slate-500 font-medium text-sm">Showing {MOCK_JOBS.length} results</span>
-              <button onClick={() => setIsMobileFilterOpen(true)} className="lg:hidden flex items-center gap-2 bg-white border border-slate-200 px-5 py-2.5 rounded-xl text-sm font-bold text-slate-700 shadow-sm hover:border-orange-500 hover:text-orange-500 transition-colors">
-                <Filter className="w-4 h-4" /> Filters
-              </button>
-            </div>
-          </div>
+          {/* Job Results */}
+          <div className="flex-1">
+            <h2 className="text-sm font-bold text-orange-500 uppercase tracking-wider mb-4">Open Roles ({filteredJobs.length})</h2>
+            
+            {filteredJobs.length === 0 ? (
+               <div className="text-center py-20 bg-white rounded-2xl border border-slate-200">
+                 <h3 className="text-xl font-bold text-slate-900 mb-2">No jobs found</h3>
+                 <p className="text-slate-500">We couldn&apos;t find any positions matching your search criteria.</p>
+               </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {filteredJobs.map(job => (
+                  <div key={job.id} className="bg-white p-6 rounded-2xl border border-slate-200 hover:border-orange-300 hover:shadow-md transition-all flex flex-col h-full">
+                    <div className="flex justify-between items-start mb-2">
+                      <p className="text-slate-500 text-xs font-medium">{job.company}</p>
+                      <span className="text-slate-400 text-xs">{job.posted}</span>
+                    </div>
+                    <h3 className="font-bold text-slate-900 text-lg mb-4">{job.title}</h3>
+                    
+                    <div className="grid grid-cols-2 gap-y-2 text-sm text-slate-600 mb-4">
+                      <div className="flex items-center"><MapPin className="w-4 h-4 mr-2 text-slate-400" /> {job.location}</div>
+                      <div className="flex items-center"><Briefcase className="w-4 h-4 mr-2 text-slate-400" /> {job.type}</div>
+                      <div className="flex items-center col-span-2"><CheckCircle className="w-4 h-4 mr-2 text-slate-400" /> Exp: {job.experience}</div>
+                    </div>
 
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-            {MOCK_JOBS.map(job => (
-              <div key={job.id} className="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-200 hover:border-orange-500 hover:shadow-xl transition-all flex flex-col h-full group">
-                <div className="flex justify-between items-start mb-4">
-                  <span className="text-sm font-bold text-slate-500">{job.company}</span>
-                  <span className="text-xs font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-lg">{job.posted}</span>
-                </div>
-                <h3 className="text-2xl font-extrabold text-orange-500 mb-4 transition-colors leading-tight">{job.title}</h3>
-                <div className="space-y-3 mb-6">
-                  <div className="flex items-center text-sm text-slate-600 font-bold"><MapPin className="w-4 h-4 mr-2 text-slate-400" /> {job.location}</div>
-                  <div className="flex items-center text-sm text-slate-600 font-bold"><Briefcase className="w-4 h-4 mr-2 text-slate-400" /> {job.type}</div>
-                </div>
-                <div className="mb-6">
-                   <span className="inline-block px-4 py-1.5 bg-blue-50 text-blue-600 font-extrabold text-sm rounded-lg">{job.salary}</span>
-                </div>
-                <div className="flex flex-wrap gap-2 mb-8 flex-1">
-                  {job.tags.map(tag => (
-                    <span key={tag} className="px-3 py-1 bg-slate-50 border border-slate-200 text-slate-600 rounded-lg text-xs font-bold">{tag}</span>
-                  ))}
-                </div>
-                <div className="flex gap-4 items-center">
-                  <button className="flex-1 text-slate-700 font-bold hover:text-orange-500 transition-colors text-center py-3.5 border border-slate-200 rounded-xl">
-                    View Details
-                  </button>
-                  <button className="flex-1 bg-orange-500 text-white font-bold px-4 py-3.5 rounded-xl hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/20">
-                    Apply Now
-                  </button>
-                </div>
+                    <div className="mb-6">
+                      <span className="inline-block px-3 py-1 bg-orange-50 text-orange-600 font-semibold text-xs rounded-full">
+                        {job.salary}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mb-6 mt-auto">
+                      {job.tags.map(tag => (
+                        <span key={tag} className="px-2 py-1 bg-slate-50 border border-slate-100 text-slate-600 rounded text-xs font-medium">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center space-x-3 pt-4 border-t border-slate-100">
+                      <button className="flex-1 text-center py-2 text-sm font-semibold text-slate-600 hover:text-orange-500 transition-colors">View Details</button>
+                      <button className="flex-1 bg-orange-500 text-white py-2 rounded-lg text-sm font-semibold hover:bg-orange-600 transition-colors shadow-sm">Apply Now</button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
+
+            <div className="mt-12 bg-orange-500 rounded-2xl p-8 text-white flex flex-col md:flex-row items-center justify-between shadow-lg">
+              <div>
+                <h3 className="text-2xl font-bold mb-2">Don&apos;t see your perfect role?</h3>
+                <p className="text-orange-100">Submit your CV and we&apos;ll reach out when something matches.</p>
+              </div>
+              <div className="mt-6 md:mt-0 flex space-x-4">
+                <button className="bg-white text-orange-600 font-semibold px-6 py-2.5 rounded-lg hover:bg-orange-50 transition-colors">Upload Your CV</button>
+              </div>
+            </div>
+
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

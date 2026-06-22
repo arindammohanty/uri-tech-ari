@@ -6,16 +6,15 @@ import {
 } from 'lucide-react';
 
 const FAQS = [
-  { q: "How quickly can you fill a position?", a: "For most mid-level IT roles, we can deliver a shortlist of 3-5 pre-screened candidates within 5 business days." },
-  { q: "Do you work with startups or only enterprise clients?", a: "We work with companies of all sizes, from seed-stage startups building their founding engineering team to enterprise corporations scaling up." },
-  { q: "What industries do you specialize in?", a: "Our core focuses are IT & Software, Manufacturing, Finance & Accounting, Retail & E-commerce, and Healthcare tech." },
-  { q: "Is there a fee for job seekers?", a: "No, our placement services are completely free for job seekers. We are compensated by our client companies." },
-  { q: "What is your replacement guarantee?", a: "We offer a 90-day free replacement guarantee for all permanent placements to ensure long-term fit." },
-  { q: "How do I submit my CV if I don't see a matching job?", a: "Use the 'I'm Looking for a Job' form on this page. We'll add you to our talent pool and reach out when a matching role opens up." }
+  { q: "How can I get started with URI Technologies?", a: "Reach out to us via our Business Inquiry form, and our solutions architect team will guide you through our onboarding and discovery process." },
+  { q: "What industries do you specialize in?", a: "We cater to various sectors including the Public Sector, Energy & Utility, Industrial, IT & SaaS, Automotive, Healthcare, and Startups." },
+  { q: "Do you offer post-deployment support?", a: "Yes, we provide 24/7 post-deployment support, infrastructure monitoring, and continuous optimization for all our enterprise software rollouts." },
+  { q: "What cloud platforms do you support?", a: "We hold deep expertise across AWS, Microsoft Azure, and Google Cloud, building secure and compliant multi-cloud and hybrid environments." },
+  { q: "How long does a digital transformation audit take?", a: "Initial enterprise risk assessments and capability audits typically run between 2 to 4 weeks depending on the scale of your current infrastructure." }
 ];
 
 export default function ContactPage() {
-  const [formType, setFormType] = useState<'hiring' | 'job'>('hiring');
+  const [formType, setFormType] = useState<'business' | 'career'>('business');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
@@ -28,7 +27,6 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900 pb-20">
       
-      {/* Hero Section */}
       <section className="relative pt-20 pb-16 border-b border-slate-100 bg-slate-50/50 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-50"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
@@ -39,7 +37,7 @@ export default function ContactPage() {
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight">Get In Touch</h1>
           <p className="text-lg md:text-xl text-slate-500 max-w-2xl leading-relaxed">
-            Whether you&apos;re hiring or job hunting, we&apos;d love to hear from you.
+            Whether you&apos;re looking to transform your enterprise infrastructure or join our engineering team, we&apos;d love to hear from you.
           </p>
         </div>
       </section>
@@ -47,11 +45,10 @@ export default function ContactPage() {
       <section className="py-20 lg:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
           
-          {/* Left: Contact Info */}
           <div>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6">Let&apos;s Talk</h2>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6">Let&apos;s Connect</h2>
             <p className="text-lg text-slate-500 mb-12 leading-relaxed">
-              Reach out and one of our team members will respond within one business day. We work with businesses of all sizes across India.
+              Reach out to our architects. We respond to all technical inquiries within one business day.
             </p>
             
             <div className="space-y-8">
@@ -87,17 +84,8 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
-
-            <div className="flex items-center space-x-4 mt-12">
-              {[Linkedin, Twitter, Facebook].map((Icon, i) => (
-                <a key={i} href="#" className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-orange-500 hover:border-orange-500 transition-colors">
-                  <Icon className="w-5 h-5" />
-                </a>
-              ))}
-            </div>
           </div>
 
-          {/* Right: Interactive Form */}
           <div className="bg-white p-8 md:p-10 rounded-[2rem] border border-slate-200 shadow-xl relative overflow-hidden">
             {isSubmitted && (
               <div className="absolute inset-0 bg-white/95 backdrop-blur-sm z-10 flex flex-col items-center justify-center text-center p-8 animate-in fade-in zoom-in duration-300">
@@ -109,19 +97,18 @@ export default function ContactPage() {
               </div>
             )}
 
-            {/* Form Toggle */}
             <div className="flex bg-slate-100 p-1.5 rounded-xl mb-10">
               <button 
-                onClick={() => setFormType('hiring')}
-                className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${formType === 'hiring' ? 'bg-orange-500 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
+                onClick={() => setFormType('business')}
+                className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${formType === 'business' ? 'bg-orange-500 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
               >
-                I&apos;m Hiring
+                Business Inquiry
               </button>
               <button 
-                onClick={() => setFormType('job')}
-                className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${formType === 'job' ? 'bg-orange-500 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
+                onClick={() => setFormType('career')}
+                className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${formType === 'career' ? 'bg-orange-500 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
               >
-                I&apos;m Looking for a Job
+                Careers
               </button>
             </div>
 
@@ -131,7 +118,7 @@ export default function ContactPage() {
                 <input required type="text" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
               </div>
 
-              {formType === 'hiring' && (
+              {formType === 'business' && (
                 <div>
                   <label className="block text-sm font-bold text-slate-900 mb-2">Company Name <span className="text-red-500">*</span></label>
                   <input required type="text" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
@@ -139,7 +126,7 @@ export default function ContactPage() {
               )}
 
               <div>
-                <label className="block text-sm font-bold text-slate-900 mb-2">{formType === 'hiring' ? 'Work Email' : 'Email Address'} <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-bold text-slate-900 mb-2">{formType === 'business' ? 'Work Email' : 'Email Address'} <span className="text-red-500">*</span></label>
                 <input required type="email" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
               </div>
 
@@ -148,22 +135,18 @@ export default function ContactPage() {
                 <input type="tel" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
               </div>
 
-              {formType === 'hiring' ? (
+              {formType === 'business' ? (
                 <>
                   <div>
-                    <label className="block text-sm font-bold text-slate-900 mb-2">Number of Positions</label>
-                    <input type="number" min="1" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-bold text-slate-900 mb-2">Requirement Details <span className="text-red-500">*</span></label>
-                    <textarea required rows={4} placeholder="Tell us about the role, skills needed, and timeline..." className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all resize-none"></textarea>
+                    <label className="block text-sm font-bold text-slate-900 mb-2">Project Details <span className="text-red-500">*</span></label>
+                    <textarea required rows={4} placeholder="Tell us about the digital transformation objectives..." className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all resize-none"></textarea>
                   </div>
                 </>
               ) : (
                 <>
                   <div>
                     <label className="block text-sm font-bold text-slate-900 mb-2">Target Job Role <span className="text-red-500">*</span></label>
-                    <input required type="text" placeholder="e.g. Frontend Developer" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+                    <input required type="text" placeholder="e.g. ServiceNow Developer" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-slate-900 mb-2">LinkedIn Profile URL</label>
@@ -173,25 +156,13 @@ export default function ContactPage() {
               )}
               
               <button type="submit" className="w-full py-4 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/20 mt-4">
-                {formType === 'hiring' ? 'Submit Hiring Inquiry' : 'Submit Application'}
+                {formType === 'business' ? 'Submit Inquiry' : 'Submit Application'}
               </button>
             </form>
           </div>
         </div>
       </section>
 
-      {/* Map Banner Center */}
-      <section className="py-20 bg-slate-50 border-y border-slate-100 text-center">
-        <div className="max-w-3xl mx-auto px-4">
-          <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-200">
-            <MapPin className="w-8 h-8 text-orange-500" />
-          </div>
-          <h2 className="text-3xl font-extrabold text-slate-900 mb-4">Bhubaneswar, Odisha</h2>
-          <p className="text-lg text-slate-500">B-36, 2nd Floor, Rupali Street, Sahid Nagar, Bhubaneswar - 751007, Odisha</p>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
       <section className="py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-12 text-center">Frequently Asked Questions</h2>
         
@@ -205,9 +176,7 @@ export default function ContactPage() {
                 <span className="text-lg font-bold text-slate-900 pr-8">{faq.q}</span>
                 <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 shrink-0 ${openFaq === i ? 'rotate-180 text-orange-500' : ''}`} />
               </button>
-              <div 
-                className={`overflow-hidden transition-all duration-300 ease-in-out ${openFaq === i ? 'max-h-40 opacity-100 mb-4' : 'max-h-0 opacity-0'}`}
-              >
+              <div className={`overflow-hidden transition-all duration-300 ease-in-out ${openFaq === i ? 'max-h-40 opacity-100 mb-4' : 'max-h-0 opacity-0'}`}>
                 <p className="text-slate-600 leading-relaxed pt-2 pr-8">{faq.a}</p>
               </div>
             </div>

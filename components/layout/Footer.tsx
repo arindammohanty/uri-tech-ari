@@ -8,7 +8,6 @@ import { ArrowRight, Facebook, Instagram, Linkedin } from 'lucide-react';
 export default function Footer() {
   const pathname = usePathname();
 
-  // Hide footer on CRN platform
   if (pathname === '/crn') {
     return null;
   }
@@ -17,10 +16,8 @@ export default function Footer() {
     <footer className="bg-[#F8F9FA] pt-12 pb-12 border-t border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Top Banner */}
         <div className="relative bg-[#FF6B35] rounded-[2rem] p-10 md:p-16 lg:p-20 text-center text-white mb-12 overflow-hidden shadow-lg shadow-orange-500/10">
           
-          {/* Interconnected Nodes Background Pattern */}
           <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="diamonds" width="64" height="64" patternUnits="userSpaceOnUse">
@@ -35,45 +32,40 @@ export default function Footer() {
           </svg>
           
           <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 tracking-tight">Ready to Build Your Dream Team?</h2>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 tracking-tight">Ready for Digital Transformation?</h2>
             <p className="text-white/90 text-sm md:text-base mb-8 max-w-2xl mx-auto font-medium">
-              Whether you&apos;re looking for your next opportunity or searching for top talent — URI Tech is your strategic hiring partner.
+              Accelerate your growth and future-proof your enterprise with URI Technologies.
             </p>
             <Link 
               href="/contact" 
               className="inline-flex justify-center bg-white text-slate-900 font-semibold px-6 py-3.5 rounded-xl items-center hover:bg-slate-50 transition-colors shadow-sm"
             >
-              Get Started <ArrowRight className="ml-2 w-4 h-4" strokeWidth={2.5} />
+              Consult Experts <ArrowRight className="ml-2 w-4 h-4" strokeWidth={2.5} />
             </Link>
           </div>
         </div>
 
-        {/* Main Footer Box */}
         <div className="bg-white border border-slate-200 rounded-[2rem] p-8 md:p-12 shadow-sm">
           
-          {/* Logo Row */}
           <div className="mb-10">
             <Link href="/" className="flex items-center">
               <span className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">URI</span>
-              <span className="text-2xl md:text-3xl font-extrabold tracking-tight text-[#FF6B35] ml-1.5">Tech</span>
+              <span className="text-2xl md:text-3xl font-extrabold tracking-tight text-[#FF6B35] ml-1.5">Technologies</span>
             </Link>
           </div>
 
-          {/* 4-Column / 2-Column Responsive Grid */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 w-full items-start">
             
-            {/* Column 1: Head Office */}
             <div className="flex flex-col">
               <h3 className="font-bold text-slate-900 mb-4 text-[15px] md:text-base">Head office</h3>
               <div className="space-y-1.5 text-slate-500 text-sm font-medium leading-relaxed">
-                <p>URI Tech Pvt. Ltd.</p>
+                <p>URI Technologies</p>
                 <p>B-36, 2nd Floor, Rupali Street,</p>
                 <p>Sahid Nagar, Bhubaneswar</p>
                 <p>Odisha 751007</p>
               </div>
             </div>
 
-            {/* Column 2: Contact Us */}
             <div className="flex flex-col">
               <h3 className="font-bold text-slate-900 mb-4 text-[15px] md:text-base">Contact us</h3>
               <div className="space-y-1.5 text-slate-500 text-sm font-medium leading-relaxed">
@@ -82,33 +74,30 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Column 3: Services */}
             <div className="flex flex-col">
-              <h3 className="font-bold text-slate-900 mb-4 text-[15px] md:text-base">Services</h3>
+              <h3 className="font-bold text-slate-900 mb-4 text-[15px] md:text-base">Core Services</h3>
               <ul className="space-y-3 text-slate-500 text-sm font-medium">
-                <li><Link href="/services" className="hover:text-[#FF6B35] transition-colors">IT Staffing</Link></li>
-                <li><Link href="/services" className="hover:text-[#FF6B35] transition-colors">Contract Hiring</Link></li>
-                <li><Link href="/services" className="hover:text-[#FF6B35] transition-colors">Permanent Placement</Link></li>
-                <li><Link href="/services" className="hover:text-[#FF6B35] transition-colors">HR Consulting</Link></li>
+                <li><Link href="/services/cloud-platform-services" className="hover:text-[#FF6B35] transition-colors">Cloud Platforms</Link></li>
+                <li><Link href="/services/cyber-security-platform-services" className="hover:text-[#FF6B35] transition-colors">Cyber Security</Link></li>
+                <li><Link href="/services/api-and-microservices-architecture" className="hover:text-[#FF6B35] transition-colors">Microservices</Link></li>
+                <li><Link href="/services/devops-and-agile-transformation" className="hover:text-[#FF6B35] transition-colors">DevOps & Agile</Link></li>
               </ul>
             </div>
 
-            {/* Column 4: Company */}
             <div className="flex flex-col">
               <h3 className="font-bold text-slate-900 mb-4 text-[15px] md:text-base">Company</h3>
               <ul className="space-y-3 text-slate-500 text-sm font-medium">
                 <li><Link href="/about" className="hover:text-[#FF6B35] transition-colors">About Us</Link></li>
-                <li><Link href="/services" className="hover:text-[#FF6B35] transition-colors">Industries</Link></li>
+                <li><Link href="/services" className="hover:text-[#FF6B35] transition-colors">All Services</Link></li>
                 <li><Link href="/contact" className="hover:text-[#FF6B35] transition-colors">Contact</Link></li>
               </ul>
             </div>
 
           </div>
 
-          {/* Divider & Copyright Row */}
           <div className="mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6">
             <p className="text-slate-600 text-sm font-medium text-center md:text-left">
-              © 2026 URI Tech. All rights reserved.
+              © {new Date().getFullYear()} URI Technologies. All rights reserved.
             </p>
             <div className="flex items-center space-x-5 text-slate-900">
               <a href="#" aria-label="Facebook" className="hover:text-[#FF6B35] transition-colors">
