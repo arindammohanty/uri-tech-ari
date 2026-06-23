@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { 
-  Phone, Mail, MapPin, CheckCircle
+  Phone, Mail, MapPin, CheckCircle, ArrowLeft
 } from 'lucide-react';
 
 const COUNTRY_CODES = [
@@ -96,7 +96,6 @@ export default function ContactPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitted(true);
-    setTimeout(() => setIsSubmitted(false), 5000);
   };
 
   return (
@@ -161,103 +160,115 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div className="bg-white p-8 md:p-10 rounded-[2rem] border border-slate-200 shadow-xl relative overflow-hidden">
-            {isSubmitted && (
-              <div className="absolute inset-0 bg-white/95 backdrop-blur-sm z-10 flex flex-col items-center justify-center text-center p-8 animate-in fade-in zoom-in duration-300">
-                <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mb-6">
-                  <CheckCircle className="w-10 h-10 text-green-500" />
+          <div className="bg-white p-8 md:p-10 rounded-[2rem] border border-slate-200 shadow-xl relative overflow-hidden min-h-[600px] flex flex-col">
+            {isSubmitted ? (
+              <div className="flex-1 flex flex-col items-center justify-center text-center animate-in fade-in zoom-in duration-500">
+                <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mb-8 shadow-inner">
+                  <CheckCircle className="w-12 h-12 text-green-500" />
                 </div>
-                <h3 className="text-3xl font-extrabold text-slate-900 mb-2">Message Sent!</h3>
-                <p className="text-lg text-slate-500">Thank you. We will be in touch shortly.</p>
+                <h3 className="text-3xl font-extrabold text-slate-900 mb-4">Message Sent Successfully</h3>
+                <p className="text-lg text-slate-500 mb-10 max-w-sm mx-auto leading-relaxed">
+                  Thank you for reaching out to us. One of our specialized team members will review your inquiry and respond within one business day.
+                </p>
+                <button 
+                  type="button"
+                  onClick={() => setIsSubmitted(false)}
+                  className="flex items-center px-8 py-4 bg-slate-50 text-slate-700 font-bold rounded-xl hover:bg-slate-100 border border-slate-200 transition-colors"
+                >
+                  <ArrowLeft className="w-5 h-5 mr-2" />
+                  Submit Another Request
+                </button>
               </div>
-            )}
-
-            <div className="flex bg-slate-100 p-1.5 rounded-xl mb-10">
-              <button 
-                type="button"
-                onClick={() => setFormType('business')}
-                className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${formType === 'business' ? 'bg-orange-500 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
-              >
-                Business Inquiry
-              </button>
-              <button 
-                type="button"
-                onClick={() => setFormType('career')}
-                className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${formType === 'career' ? 'bg-orange-500 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
-              >
-                Careers
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block text-sm font-bold text-slate-900 mb-2">Full Name <span className="text-red-500">*</span></label>
-                <input required type="text" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
-              </div>
-
-              {formType === 'business' && (
-                <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-2">Company Name <span className="text-red-500">*</span></label>
-                  <input required type="text" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
-                </div>
-              )}
-
-              <div>
-                <label className="block text-sm font-bold text-slate-900 mb-2">{formType === 'business' ? 'Work Email' : 'Email Address'} <span className="text-red-500">*</span></label>
-                <input required type="email" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-slate-900 mb-2">Phone Number</label>
-                <div className="flex shadow-sm rounded-xl">
-                  <select 
-                    defaultValue="+91"
-                    className="px-3 py-3 rounded-l-xl border border-r-0 border-slate-200 bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent focus:z-10 transition-all font-medium cursor-pointer max-w-[120px]"
+            ) : (
+              <>
+                <div className="flex bg-slate-100 p-1.5 rounded-xl mb-10">
+                  <button 
+                    type="button"
+                    onClick={() => setFormType('business')}
+                    className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${formType === 'business' ? 'bg-orange-500 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
                   >
-                    {COUNTRY_CODES.map((country, idx) => (
-                      <option key={`${country.code}-${idx}`} value={country.code}>
-                        {country.label}
-                      </option>
-                    ))}
-                  </select>
-                  <input 
-                    type="tel" 
-                    pattern="\d{10}"
-                    maxLength={10}
-                    minLength={10}
-                    onInput={(e) => {
-                      e.currentTarget.value = e.currentTarget.value.replace(/\D/g, '');
-                    }}
-                    placeholder="10-digit number"
-                    className="w-full px-4 py-3 rounded-r-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent focus:z-10 transition-all" 
-                  />
+                    Business Inquiry
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={() => setFormType('career')}
+                    className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${formType === 'career' ? 'bg-orange-500 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
+                  >
+                    Careers
+                  </button>
                 </div>
-              </div>
 
-              {formType === 'business' ? (
-                <>
+                <form onSubmit={handleSubmit} className="space-y-6 flex-1 flex flex-col justify-center animate-in fade-in duration-300">
                   <div>
-                    <label className="block text-sm font-bold text-slate-900 mb-2">Project Details <span className="text-red-500">*</span></label>
-                    <textarea required rows={4} placeholder="Tell us about the digital transformation objectives..." className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all resize-none"></textarea>
+                    <label className="block text-sm font-bold text-slate-900 mb-2">Full Name <span className="text-red-500">*</span></label>
+                    <input required type="text" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
                   </div>
-                </>
-              ) : (
-                <>
+
+                  {formType === 'business' && (
+                    <div>
+                      <label className="block text-sm font-bold text-slate-900 mb-2">Company Name <span className="text-red-500">*</span></label>
+                      <input required type="text" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+                    </div>
+                  )}
+
                   <div>
-                    <label className="block text-sm font-bold text-slate-900 mb-2">Target Job Role <span className="text-red-500">*</span></label>
-                    <input required type="text" placeholder="e.g. ServiceNow Developer" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+                    <label className="block text-sm font-bold text-slate-900 mb-2">{formType === 'business' ? 'Work Email' : 'Email Address'} <span className="text-red-500">*</span></label>
+                    <input required type="email" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
                   </div>
+
                   <div>
-                    <label className="block text-sm font-bold text-slate-900 mb-2">LinkedIn Profile URL</label>
-                    <input type="url" placeholder="https://linkedin.com/in/..." className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+                    <label className="block text-sm font-bold text-slate-900 mb-2">Phone Number</label>
+                    <div className="flex shadow-sm rounded-xl">
+                      <select 
+                        defaultValue="+91"
+                        className="px-3 py-3 rounded-l-xl border border-r-0 border-slate-200 bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent focus:z-10 transition-all font-medium cursor-pointer max-w-[120px]"
+                      >
+                        {COUNTRY_CODES.map((country, idx) => (
+                          <option key={`${country.code}-${idx}`} value={country.code}>
+                            {country.label}
+                          </option>
+                        ))}
+                      </select>
+                      <input 
+                        type="tel" 
+                        pattern="\d{10}"
+                        maxLength={10}
+                        minLength={10}
+                        onInput={(e) => {
+                          e.currentTarget.value = e.currentTarget.value.replace(/\D/g, '');
+                        }}
+                        placeholder="10-digit number"
+                        className="w-full px-4 py-3 rounded-r-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent focus:z-10 transition-all" 
+                      />
+                    </div>
                   </div>
-                </>
-              )}
-              
-              <button type="submit" className="w-full py-4 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/20 mt-4">
-                {formType === 'business' ? 'Submit Inquiry' : 'Submit Application'}
-              </button>
-            </form>
+
+                  {formType === 'business' ? (
+                    <>
+                      <div>
+                        <label className="block text-sm font-bold text-slate-900 mb-2">Project Details <span className="text-red-500">*</span></label>
+                        <textarea required rows={4} placeholder="Tell us about the digital transformation objectives..." className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all resize-none"></textarea>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div>
+                        <label className="block text-sm font-bold text-slate-900 mb-2">Target Job Role <span className="text-red-500">*</span></label>
+                        <input required type="text" placeholder="e.g. ServiceNow Developer" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-slate-900 mb-2">LinkedIn Profile URL</label>
+                        <input type="url" placeholder="https://linkedin.com/in/..." className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+                      </div>
+                    </>
+                  )}
+                  
+                  <button type="submit" className="w-full py-4 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/20 mt-4">
+                    {formType === 'business' ? 'Submit Inquiry' : 'Submit Application'}
+                  </button>
+                </form>
+              </>
+            )}
           </div>
         </div>
       </section>

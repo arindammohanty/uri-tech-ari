@@ -42,6 +42,7 @@ const LIVE_OPENINGS = [
     id: 1, 
     title: "ServiceNow Developer", 
     company: "URI Technologies", 
+    department: "Application Development",
     location: "Bangalore", 
     workMode: "Hybrid",
     type: "Full-Time", 
@@ -55,6 +56,7 @@ const LIVE_OPENINGS = [
     id: 2, 
     title: "Senior Cloud Architect", 
     company: "URI Technologies", 
+    department: "Cloud Infrastructure",
     location: "Bhubaneswar", 
     workMode: "On-site",
     type: "Full-Time", 
@@ -68,6 +70,7 @@ const LIVE_OPENINGS = [
     id: 3, 
     title: "DevSecOps Engineer", 
     company: "URI Technologies", 
+    department: "DevOps & Agile",
     location: "Remote", 
     workMode: "Remote",
     type: "Contract", 
@@ -81,6 +84,7 @@ const LIVE_OPENINGS = [
     id: 4, 
     title: "IT Strategy Consultant", 
     company: "URI Technologies", 
+    department: "IT Consulting",
     location: "Remote", 
     workMode: "Remote",
     type: "Full-Time", 
@@ -92,24 +96,73 @@ const LIVE_OPENINGS = [
   },
 ];
 
-export default function JobsPage() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [locationFilter, setLocationFilter] = useState('All Locations');
-  const [typeFilter, setTypeFilter] = useState('All Types');
-  const [minSalary, setMinSalary] = useState(0);
+interface FilterState {
+  search: string;
+  location: string;
+  type: string;
+  experience: string;
+  departments: string[];
+  workModes: string[];
+  minSalary: number;
+}
 
-  // Advanced Filtering Logic
+const defaultFilters: FilterState = {
+  search: '',
+  location: 'All Locations',
+  type: 'All Types',
+  experience: 'All Levels',
+  departments: [],
+  workModes: [],
+  minSalary: 0
+};
+
+export default function JobsPage() {
+  // 1. DRAFT STATE: Updates immediately as the user clicks/types
+  const [draftFilters, setDraftFilters] = useState<FilterState>(defaultFilters);
+  
+  // 2. APPLIED STATE: Only updates when "Apply Filters" is clicked
+  const [appliedFilters, setAppliedFilters] = useState<FilterState>(defaultFilters);
+
+  // Helper to toggle arrays (checkboxes) in the draft state
+  const toggleDraftArray = (key: 'departments' | 'workModes', value: string) => {
+    setDraftFilters(prev => {
+      const currentArray = prev[key];
+      const newArray = currentArray.includes(value) 
+        ? currentArray.filter(item => item !== value)
+        : [...currentArray, value];
+      return { ...prev, [key]: newArray };
+    });
+  };
+
+  // Push draft state to applied state
+  const handleApplyFilters = () => {
+    setAppliedFilters(draftFilters);
+  };
+
+  // 3. FILTERING LOGIC: Runs against the APPLIED state only
   const filteredJobs = useMemo(() => {
     return LIVE_OPENINGS.filter(job => {
-      const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                            job.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-      const matchesLocation = locationFilter === 'All Locations' || job.location.includes(locationFilter) || job.workMode === locationFilter;
-      const matchesType = typeFilter === 'All Types' || job.type === typeFilter;
-      const matchesSalary = (job.salaryMax || 0) >= minSalary;
+      const s = appliedFilters.search.toLowerCase();
+      const matchesSearch = !s || job.title.toLowerCase().includes(s) || 
+                            job.tags.some(tag => tag.toLowerCase().includes(s));
+                            
+      const matchesLocation = appliedFilters.location === 'All Locations' || 
+                              job.location === appliedFilters.location || 
+                              job.workMode === appliedFilters.location;
+                              
+      const matchesType = appliedFilters.type === 'All Types' || job.type === appliedFilters.type;
+      
+      const matchesSalary = (job.salaryMax || 0) >= appliedFilters.minSalary;
 
-      return matchesSearch && matchesLocation && matchesType && matchesSalary;
+      const matchesDept = appliedFilters.departments.length === 0 || 
+                          appliedFilters.departments.includes(job.department);
+                          
+      const matchesWorkMode = appliedFilters.workModes.length === 0 || 
+                              appliedFilters.workModes.includes(job.workMode);
+
+      return matchesSearch && matchesLocation && matchesType && matchesSalary && matchesDept && matchesWorkMode;
     });
-  }, [searchTerm, locationFilter, typeFilter, minSalary]);
+  }, [appliedFilters]);
 
   return (
     <div className="min-h-screen bg-slate-50 animate-in fade-in duration-500 pb-20">
@@ -145,8 +198,8 @@ export default function JobsPage() {
                   type="text" 
                   placeholder="Job title, skills..." 
                   className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg text-sm outline-none focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  value={draftFilters.search}
+                  onChange={(e) => setDraftFilters({ ...draftFilters, search: e.target.value })}
                 />
               </div>
             </div>
@@ -154,8 +207,8 @@ export default function JobsPage() {
               <label className="block text-xs font-bold text-slate-500 mb-1 uppercase tracking-wider">Location</label>
               <select 
                 className="w-full px-4 py-3 border border-slate-300 rounded-lg text-sm outline-none focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 appearance-none bg-white"
-                value={locationFilter}
-                onChange={(e) => setLocationFilter(e.target.value)}
+                value={draftFilters.location}
+                onChange={(e) => setDraftFilters({ ...draftFilters, location: e.target.value })}
               >
                 <option value="All Locations">All Locations</option>
                 <option value="Bangalore">Bangalore</option>
@@ -167,8 +220,8 @@ export default function JobsPage() {
               <label className="block text-xs font-bold text-slate-500 mb-1 uppercase tracking-wider">Job Type</label>
               <select 
                 className="w-full px-4 py-3 border border-slate-300 rounded-lg text-sm outline-none focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 appearance-none bg-white"
-                value={typeFilter}
-                onChange={(e) => setTypeFilter(e.target.value)}
+                value={draftFilters.type}
+                onChange={(e) => setDraftFilters({ ...draftFilters, type: e.target.value })}
               >
                 <option value="All Types">All Types</option>
                 <option value="Full-Time">Full-Time</option>
@@ -177,10 +230,14 @@ export default function JobsPage() {
             </div>
             <div>
               <label className="block text-xs font-bold text-slate-500 mb-1 uppercase tracking-wider">Experience</label>
-              <select className="w-full px-4 py-3 border border-slate-300 rounded-lg text-sm outline-none focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 appearance-none bg-white">
-                <option>All Levels</option>
-                <option>Mid Level (3-5 yrs)</option>
-                <option>Senior (5+ yrs)</option>
+              <select 
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg text-sm outline-none focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 appearance-none bg-white"
+                value={draftFilters.experience}
+                onChange={(e) => setDraftFilters({ ...draftFilters, experience: e.target.value })}
+              >
+                <option value="All Levels">All Levels</option>
+                <option value="Mid Level (3-5 yrs)">Mid Level (3-5 yrs)</option>
+                <option value="Senior (5+ yrs)">Senior (5+ yrs)</option>
               </select>
             </div>
           </div>
@@ -192,7 +249,7 @@ export default function JobsPage() {
           
           {/* Sidebar */}
           <aside className="w-full lg:w-64 shrink-0">
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 sticky top-48">
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 sticky top-48 shadow-sm">
               <h2 className="font-bold text-slate-900 mb-6 text-lg">Filters</h2>
               
               <div className="mb-6">
@@ -200,7 +257,12 @@ export default function JobsPage() {
                 <div className="space-y-3">
                   {['Cloud Infrastructure', 'Cyber Security', 'DevOps & Agile', 'IT Consulting', 'Application Development'].map(dept => (
                     <label key={dept} className="flex items-center space-x-3 cursor-pointer group">
-                      <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-orange-500 focus:ring-orange-500" />
+                      <input 
+                        type="checkbox" 
+                        checked={draftFilters.departments.includes(dept)}
+                        onChange={() => toggleDraftArray('departments', dept)}
+                        className="w-4 h-4 rounded border-slate-300 text-orange-500 focus:ring-orange-500" 
+                      />
                       <span className="text-slate-600 text-sm group-hover:text-orange-500">{dept}</span>
                     </label>
                   ))}
@@ -214,9 +276,9 @@ export default function JobsPage() {
                     <label key={mode} className="flex items-center space-x-3 cursor-pointer group">
                       <input 
                         type="checkbox" 
+                        checked={draftFilters.workModes.includes(mode)}
+                        onChange={() => toggleDraftArray('workModes', mode)}
                         className="w-4 h-4 rounded border-slate-300 text-orange-500 focus:ring-orange-500" 
-                        checked={locationFilter === mode}
-                        onChange={() => setLocationFilter(locationFilter === mode ? 'All Locations' : mode)}
                       />
                       <span className="text-slate-600 text-sm group-hover:text-orange-500">{mode}</span>
                     </label>
@@ -227,16 +289,19 @@ export default function JobsPage() {
               <div className="mb-8">
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="text-sm font-bold text-slate-800">Min Salary</h3>
-                  <span className="text-xs font-bold text-orange-500 bg-orange-50 px-2 py-1 rounded">{minSalary > 0 ? `${minSalary} LPA+` : 'Any'}</span>
+                  <span className="text-xs font-bold text-orange-500 bg-orange-50 px-2 py-1 rounded">{draftFilters.minSalary > 0 ? `${draftFilters.minSalary} LPA+` : 'Any'}</span>
                 </div>
                 <input
-                  type="range" min="0" max="50" step="1" value={minSalary}
-                  onChange={(e) => setMinSalary(parseInt(e.target.value))}
+                  type="range" min="0" max="50" step="1" 
+                  value={draftFilters.minSalary}
+                  onChange={(e) => setDraftFilters({ ...draftFilters, minSalary: parseInt(e.target.value) })}
                   className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
                 />
               </div>
 
-              <Button className="w-full py-2 text-sm">Apply Filters</Button>
+              <Button onClick={handleApplyFilters} className="w-full py-2 text-sm">
+                Apply Filters
+              </Button>
             </div>
           </aside>
 
@@ -245,9 +310,12 @@ export default function JobsPage() {
             <h2 className="text-sm font-bold text-orange-500 uppercase tracking-wider mb-4">Open Roles ({filteredJobs.length})</h2>
             
             {filteredJobs.length === 0 ? (
-               <div className="text-center py-20 bg-white rounded-2xl border border-slate-200">
+               <div className="text-center py-20 bg-white rounded-2xl border border-slate-200 shadow-sm">
                  <h3 className="text-xl font-bold text-slate-900 mb-2">No jobs found</h3>
                  <p className="text-slate-500">We couldn&apos;t find any positions matching your search criteria.</p>
+                 <Button onClick={() => { setDraftFilters(defaultFilters); setAppliedFilters(defaultFilters); }} variant="outline" className="mt-6">
+                   Clear Filters
+                 </Button>
                </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -280,8 +348,20 @@ export default function JobsPage() {
                     </div>
 
                     <div className="flex items-center space-x-3 pt-4 border-t border-slate-100">
-                      <button className="flex-1 text-center py-2 text-sm font-semibold text-slate-600 hover:text-orange-500 transition-colors">View Details</button>
-                      <button className="flex-1 bg-orange-500 text-white py-2 rounded-lg text-sm font-semibold hover:bg-orange-600 transition-colors shadow-sm">Apply Now</button>
+                      {/* View Details dynamically routing to the job ID */}
+                      <Link 
+                        href={`/jobs/${job.id}`} 
+                        className="flex-1 text-center py-2 text-sm font-semibold text-slate-600 hover:text-orange-500 transition-colors inline-block"
+                      >
+                        View Details
+                      </Link>
+                      {/* Apply Now routing directly to CRN login */}
+                      <Link 
+                        href="/crn" 
+                        className="flex-1 bg-orange-500 text-center text-white py-2 rounded-lg text-sm font-semibold hover:bg-orange-600 transition-colors shadow-sm inline-block"
+                      >
+                        Apply Now
+                      </Link>
                     </div>
                   </div>
                 ))}
@@ -294,7 +374,9 @@ export default function JobsPage() {
                 <p className="text-orange-100">Submit your CV and we&apos;ll reach out when something matches.</p>
               </div>
               <div className="mt-6 md:mt-0 flex space-x-4">
-                <button className="bg-white text-orange-600 font-semibold px-6 py-2.5 rounded-lg hover:bg-orange-50 transition-colors">Upload Your CV</button>
+                <button className="bg-white text-orange-600 font-semibold px-6 py-2.5 rounded-lg hover:bg-orange-50 transition-colors shadow-sm">
+                  Upload Your CV
+                </button>
               </div>
             </div>
 
