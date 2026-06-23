@@ -9,11 +9,13 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
+  // Added FAQ to Global Navigation Links
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/jobs', label: 'Jobs' },
     { href: '/services', label: 'Services' },
     { href: '/about', label: 'About' },
+    { href: '/faq', label: 'FAQ' },
     { href: '/contact', label: 'Contact' },
   ];
 
@@ -26,13 +28,11 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           
-          {}
           <Link href="/" className="flex items-center cursor-pointer">
             <span className="text-3xl md:text-4xl font-extrabold tracking-tight text-orange-500">URI</span>
             <span className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 ml-1">Tech</span>
           </Link>
 
-          {}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => {
               const isActive = pathname === link.href || (pathname?.startsWith(link.href) && link.href !== '/');
@@ -50,7 +50,6 @@ export default function Navbar() {
             })}
           </div>
 
-          {}
           <div className="hidden md:flex items-center space-x-4">
             <Link 
               href="/crn"
@@ -60,7 +59,6 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {}
           <div className="md:hidden flex items-center">
             <button 
               onClick={() => setIsOpen(!isOpen)} 
@@ -72,7 +70,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {}
       {isOpen && (
         <div className="md:hidden bg-white border-b border-slate-100 absolute w-full left-0 shadow-2xl z-[100]">
           <div className="px-4 pt-2 pb-6 space-y-2">

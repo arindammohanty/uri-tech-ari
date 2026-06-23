@@ -17,16 +17,12 @@ export default function CRNPage() {
       <div className="w-full lg:w-1/2 p-8 md:p-16 lg:p-24 flex flex-col justify-center bg-slate-50 border-b lg:border-b-0 lg:border-r border-slate-200">
         <div className="max-w-xl mx-auto lg:mx-0 w-full relative">
           
-          <Link href="/" className="inline-flex items-center mb-16 hover:opacity-80 transition-opacity">
-            <span className="text-2xl font-extrabold tracking-tight text-orange-500">URI</span>
-            <span className="text-2xl font-extrabold tracking-tight text-slate-900 ml-1">Tech</span>
+          <Link href="/" className="inline-flex items-center mb-12 hover:opacity-80 transition-opacity">
+            <span className="text-8xl font-extrabold tracking-tight text-orange-500">URI</span>
+            <span className="text-8xl font-extrabold tracking-tight text-slate-900 ml-1">Tech</span>
           </Link>
 
-          <div className="mb-6 inline-block">
-            <span className="text-xs font-bold tracking-[0.25em] text-slate-400 uppercase">TECHNOLOGIES</span>
-          </div>
-
-          <h1 className="text-4xl lg:text-5xl xl:text-[54px] font-extrabold text-slate-900 leading-[1.1] tracking-tight mb-6">
+          <h1 className="text-4xl lg:text-5xl xl:text-[46px] font-extrabold text-slate-900 leading-[1.1] tracking-tight mb-6">
             Streamline your <br />
             recruitment <br />
             workflows easily.
@@ -37,7 +33,8 @@ export default function CRNPage() {
           </p>
 
           <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 relative z-10">
-            <p className="text-slate-600 font-medium leading-relaxed mb-8 text-sm">
+            {/* UPDATED: Increased text size to text-lg and made text darker (text-slate-800) */}
+            <p className="text-slate-800 font-medium leading-relaxed mb-8 text-lg italic">
               &quot;From the initial conversations all the way through to the project&apos;s successful conclusion, URI Technologies has delivered consistently. Their unique strategy has resulted in a discernible rise in our customers&apos; trust and happiness. A great option if you wish to evolve your company&apos;s digital strategy.&quot;
             </p>
             <div className="flex items-center">

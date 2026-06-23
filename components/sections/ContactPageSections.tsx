@@ -3,11 +3,9 @@
 import { useState } from "react";
 import type { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AnimatePresence, motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import {
   CheckCircle,
-  ChevronDown,
   Facebook,
   Linkedin,
   Mail,
@@ -17,7 +15,6 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Button from "@/components/ui/Button";
-import { FAQ_ITEMS } from "@/constants";
 import { SECTION_CONTAINER, SECTION_PADDING } from "@/lib/layout";
 import {
   hiringInquirySchema,
@@ -289,59 +286,11 @@ function MapSection() {
   );
 }
 
-function FaqAccordion() {
-  const [openItem, setOpenItem] = useState(FAQ_ITEMS[0]?.id ?? "");
-
-  return (
-    // --- FAQ ---
-    <section className={SECTION_PADDING} aria-labelledby="faq-heading">
-      <div className={`${SECTION_CONTAINER} max-w-4xl`}>
-        <h2 id="faq-heading" className="text-center text-3xl font-bold text-text-dark md:text-4xl">
-          Frequently Asked Questions
-        </h2>
-        <div className="mt-10">
-          {FAQ_ITEMS.map((item) => {
-            const isOpen = openItem === item.id;
-            return (
-              <div key={item.id} className="border-b border-border">
-                <button
-                  type="button"
-                  onClick={() => setOpenItem(isOpen ? "" : item.id)}
-                  className="flex w-full items-center justify-between gap-4 py-5 text-left text-base font-bold text-text-dark"
-                  aria-expanded={isOpen}
-                >
-                  {item.question}
-                  <ChevronDown className={`shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`} size={20} />
-                </button>
-                <AnimatePresence initial={false}>
-                  {isOpen ? (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeOut" }}
-                      className="overflow-hidden"
-                    >
-                      <p className="pb-5 text-sm font-medium leading-6 text-text-subtle">{item.answer}</p>
-                    </motion.div>
-                  ) : null}
-                </AnimatePresence>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-    // --- END FAQ ---
-  );
-}
-
 export default function ContactPageSections() {
   return (
     <>
       <ContactMain />
       <MapSection />
-      <FaqAccordion />
     </>
   );
 }
